@@ -175,10 +175,7 @@ CLASS unit_test IMPLEMENTATION.
         "Create message: Tag '&1' may not be nested in tag '&2'
 
         RAISE EXCEPTION TYPE zcx_sub_return3
-          MESSAGE
-          ID '00'
-          TYPE 'E'
-          NUMBER '058'
+          MESSAGE e058(00)
           WITH '1' '2' '3' '4'.
 
       CATCH zcx_sub_return3 INTO DATA(lx_return).
@@ -188,6 +185,12 @@ CLASS unit_test IMPLEMENTATION.
         cl_abap_unit_assert=>assert_equals(
           act = lt_act_bapiret2
           exp = lt_exp_bapiret2 ).
+
+        DATA(lv_text) = lx_return->get_text( ).
+
+        cl_abap_unit_assert=>assert_equals(
+          act = lv_text
+          exp = lt_act_bapiret2[ 1 ]-message ).
 
         "********************************************************
         "Add message: The input value is too big (maximum 255)
@@ -319,11 +322,22 @@ CLASS unit_test IMPLEMENTATION.
 
     lx_return->add_bapireturn_struc( ls_bapireturn ).
 
+    IF lx_return->has_messages( ) = abap_false.
+      cl_abap_unit_assert=>fail(
+        msg = 'It should contain messages' ).
+    ENDIF.
+
     DATA(lt_act_bapiret2) = lx_return->get_bapiret2_table( ).
 
     cl_abap_unit_assert=>assert_equals(
       act = lt_act_bapiret2
       exp = lt_exp_bapiret2 ).
+
+    DATA(lv_text) = lx_return->get_text( ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_text
+      exp = lt_exp_bapiret2[ 1 ]-message ).
 
   ENDMETHOD.
 
@@ -477,7 +491,6 @@ CLASS unit_test IMPLEMENTATION.
     DATA(lt_exp_bapiret2) = get_test_data_bapiret2_2_tab( ).
 
     DATA(lx_return) = NEW zcx_sub_return3( ).
-
     lx_return->add_bapiret2_table( lt_exp_bapiret2 ).
 
     DATA(lt_act_bapiret2) = lx_return->get_bapiret2_table( ).
@@ -493,6 +506,12 @@ CLASS unit_test IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = ls_act_bapiret2
       exp = ls_exp_bapiret2 ).
+
+    DATA(lv_act_text) = lx_return->get_text( ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_act_text
+      exp = ls_exp_bapiret2-message ).
 
   ENDMETHOD.
 
