@@ -179,13 +179,6 @@ CLASS zcx_return3 IMPLEMENTATION.
 
         APPEND ls_bapiret2 TO gt_return.
 
-        CLEAR if_t100_message~t100key.
-        CLEAR msgty.
-        CLEAR if_t100_dyn_msg~msgv1.
-        CLEAR if_t100_dyn_msg~msgv2.
-        CLEAR if_t100_dyn_msg~msgv3.
-        CLEAR if_t100_dyn_msg~msgv4.
-
       ENDIF.
 
     ENDIF.
@@ -349,6 +342,32 @@ CLASS zcx_return3 IMPLEMENTATION.
       ENDIF.
 
       APPEND ls_return TO gt_return.
+
+    ENDIF.
+
+    IF lines( gt_return ) = 1.
+
+      msgty                    = is_return-type.
+      if_t100_dyn_msg~msgv1    = is_return-message_v1.
+      if_t100_dyn_msg~msgv2    = is_return-message_v2.
+      if_t100_dyn_msg~msgv3    = is_return-message_v3.
+      if_t100_dyn_msg~msgv4    = is_return-message_v4.
+
+      if_t100_message~t100key-msgid = is_return-id.
+      if_t100_message~t100key-msgno = is_return-number.
+
+      IF if_t100_dyn_msg~msgv1 IS NOT INITIAL.
+        if_t100_message~t100key-attr1 = 'IF_T100_DYN_MSG~MSGV1'.
+      ENDIF.
+      IF if_t100_dyn_msg~msgv2 IS NOT INITIAL.
+        if_t100_message~t100key-attr2 = 'IF_T100_DYN_MSG~MSGV2'.
+      ENDIF.
+      IF if_t100_dyn_msg~msgv3 IS NOT INITIAL.
+        if_t100_message~t100key-attr3 = 'IF_T100_DYN_MSG~MSGV3'.
+      ENDIF.
+      IF if_t100_dyn_msg~msgv4 IS NOT INITIAL.
+        if_t100_message~t100key-attr4 = 'IF_T100_DYN_MSG~MSGV4'.
+      ENDIF.
 
     ENDIF.
 
