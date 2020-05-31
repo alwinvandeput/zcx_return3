@@ -11,6 +11,7 @@ This class is for ABAP 750 and above.
 
 It support statement RAISE EXCEPTION ... [USING] MESSAGE ... .
 Example:
+
         RAISE EXCEPTION TYPE zcx_return3
           MESSAGE e058(00)
           WITH '1' '2' '3' '4'.
